@@ -1,6 +1,9 @@
 When running `python3 abalations.movies.run` it produces the following error:
 
 ```.bash
+
+SOLVED:  By using git lfs. 
+
 Running sampling_distribution
 Traceback (most recent call last):
   File "/home/suber/.conda/envs/MPR/lib/python3.9/runpy.py", line 197, in _run_module_as_main
