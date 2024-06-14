@@ -55,12 +55,15 @@ RUN chmod +x set_env_vars.sh
 # Execute the script to set up the environment
 RUN /bin/bash set_env_vars.sh
 
+# TODO add git config --global --add safe.directory /home/suber/SUBER to the dockerfile
+
 # Create entrypoint script to activate conda environment
 RUN echo '#!/bin/bash ' > /home/suber/entrypoint.sh && \
     echo 'source /opt/miniconda/etc/profile.d/conda.sh' >> /home/suber/entrypoint.sh && \
     echo 'conda activate MPR' >> /home/suber/entrypoint.sh && \
     echo 'exec "$@"' >> /home/suber/entrypoint.sh && \
     chmod +x /home/suber/entrypoint.sh
+
 
 # Set entrypoint
 #ENTRYPOINT ["/home/suber/entrypoint.sh"]
