@@ -40,7 +40,7 @@ RUN /opt/miniconda/bin/conda create -n MPR python=3.9.0 -y && \
     /opt/miniconda/bin/conda run -n MPR conda install -c nvidia/label/cuda-11.8.0 cuda -y && \
     /opt/miniconda/bin/conda run -n MPR conda install -c pytorch -c nvidia pytorch torchvision torchaudio pytorch-cuda=11.8 -y
 
-RUN /opt/miniconda/bin/conda run -n MPR conda install ipython jupyterlab -y
+RUN /opt/miniconda/bin/conda run -n MPR conda install ipython jupyterlab wikidata -y
 
 # Export necessary environment variables and install Python requirements
 RUN echo "source /opt/miniconda/etc/profile.d/conda.sh" > set_env_vars.sh && \
