@@ -22,6 +22,9 @@ ENV PATH="/opt/miniconda/bin:$PATH"
 # Create a non-root user named 'suber'
 RUN useradd -m -s /bin/bash suber && echo "suber:suber" | chpasswd && adduser suber sudo
 
+# Create the SUBER directory and set permissions
+RUN mkdir -p /home/suber/SUBER && chown -R suber:suber /home/suber/SUBER
+
 # Switch to the new user
 USER suber
 WORKDIR /home/suber/SUBER
@@ -40,14 +43,15 @@ RUN /opt/miniconda/bin/conda create -n MPR python=3.9.0 -y && \
     /opt/miniconda/bin/conda run -n MPR conda install -c nvidia/label/cuda-11.8.0 cuda -y && \
     /opt/miniconda/bin/conda run -n MPR conda install -c pytorch -c nvidia pytorch torchvision torchaudio pytorch-cuda=11.8 -y
 
-RUN /opt/miniconda/bin/conda run -n MPR conda install ipython jupyterlab wikidata  -y
+RUN /opt/miniconda/bin/conda run -n MPR conda install ipython jupyterlab -y
 
 # Export necessary environment variables and install Python requirements
 RUN echo "source /opt/miniconda/etc/profile.d/conda.sh" > set_env_vars.sh && \
     echo "conda activate MPR" >> set_env_vars.sh && \
     echo "export TORCH_CUDA_ARCH_LIST='6.0;6.1;7.0;7.2;7.5;8.0;8.6+PTX;8.9;9.0'" >> set_env_vars.sh && \
     echo "export GITHUB_ACTIONS=true" >> set_env_vars.sh && \
-    echo "pip install -r requirements.txt" >> set_env_vars.sh
+    echo "pip install -r requirements.txt" >> set_env_vars.sh && \
+    echo "pip install wikidata" >> set_env_vars.sh  # Add this line to install the wikidata module
 
 # Make the script executable
 RUN chmod +x set_env_vars.sh
@@ -63,7 +67,6 @@ RUN echo '#!/bin/bash ' > /home/suber/entrypoint.sh && \
     echo 'conda activate MPR' >> /home/suber/entrypoint.sh && \
     echo 'exec "$@"' >> /home/suber/entrypoint.sh && \
     chmod +x /home/suber/entrypoint.sh
-
 
 # Set entrypoint
 #ENTRYPOINT ["/home/suber/entrypoint.sh"]
